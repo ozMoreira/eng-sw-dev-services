@@ -1,0 +1,54 @@
+services:
+  users-microservice:
+    build:
+      context: ./users-microservice/users-microservice
+      dockerfile: Dockerfile
+    container_name: users-microservice
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-users
+      - rabbitmq
+    networks:
+      - app-network
+        
+  postgres-users:
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - /users-microservice/data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: users
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    configs:
+      - source: rabbitmq-plugins
+        target: /etc/rabbitmq/enabled_plugins
+    volumes:
+      - /users-microservice/data:/var/lib/rabbitmq
+      - /users-microservice/data:/var/log/rabbitmq
+    networks:
+      - app-network
+
+configs:
+  rabbitmq-plugins:
+    content: "[rabbitmq_management]."
+
+networks:
+  app-network:
+    driver: bridge
