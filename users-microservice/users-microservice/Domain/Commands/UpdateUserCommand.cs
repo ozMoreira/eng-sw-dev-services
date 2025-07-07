@@ -32,6 +32,8 @@ public class UpdateUserCommand
         if (result.IsFailure)
             return result!;
         
+        await repository.Update(user);
+        
         return user;
     }
 }

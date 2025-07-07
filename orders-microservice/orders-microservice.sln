@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orders-microservice", "orders-microservice\orders-microservice.csproj", "{DDA8B6C3-8B2C-4686-919A-358231F5C91C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDA8B6C3-8B2C-4686-919A-358231F5C91C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA8B6C3-8B2C-4686-919A-358231F5C91C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA8B6C3-8B2C-4686-919A-358231F5C91C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDA8B6C3-8B2C-4686-919A-358231F5C91C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

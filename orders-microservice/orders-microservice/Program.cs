@@ -1,9 +1,8 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using users_microservice.Application;
-using users_microservice.Consumers;
-using users_microservice.Domain.Contracts;
-using users_microservice.Infra;
+using orders_microservice.Application;
+using orders_microservice.Domain.Contracts;
+using orders_microservice.Infra;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,18 +17,17 @@ builder.Services.AddLogging();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpLogging();
 
-builder.Services.AddScoped<CreateUserCommandHandler>();
-builder.Services.AddScoped<UpdateUserCommandHandler>();
-builder.Services.AddScoped<DeactivateUserCommandHandler>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<CreateOrderCommandHandler>();
+builder.Services.AddScoped<CompleteOrderCommandHandler>();
+builder.Services.AddScoped<CancelOrderCommandHandler>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-builder.Services.AddMassTransit(services =>
+builder.Services.AddMassTransit(x =>
 {
     var config = builder.Configuration.GetSection("RabbitMQ");
     
-    services.SetKebabCaseEndpointNameFormatter();
-    services.AddConsumer<OrderCompletedEventConsumer>();
-    services.UsingRabbitMq((context, cfg) =>
+    x.SetKebabCaseEndpointNameFormatter();
+    x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(config["Host"], h =>
         {
@@ -38,7 +36,6 @@ builder.Services.AddMassTransit(services =>
         });
         cfg.ConfigureEndpoints(context);
     });
-    services.AddScoped<OrderCompletedEventConsumer>();
 });
 
 var app = builder.Build();

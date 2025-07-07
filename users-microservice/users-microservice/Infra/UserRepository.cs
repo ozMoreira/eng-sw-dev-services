@@ -28,7 +28,11 @@ public class UserRepository(AppDbContext context) : IUserRepository
 
     public async Task<User?> Load(Guid id)
     {
-        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await context
+            .Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == id);
+        
         return (User?)user;
     }
 
@@ -39,8 +43,10 @@ public class UserRepository(AppDbContext context) : IUserRepository
         
         var users = await context
             .Users
+            .AsNoTracking()
             .Skip(skip)
-            .Take(take).ToListAsync();
+            .Take(take)
+            .ToListAsync();
         
         return users.Count == 0 
             ? Enumerable.Empty<User>().ToList() 

@@ -11,10 +11,10 @@ services:
       - rabbitmq
     networks:
       - app-network
-        
+      
   postgres-users:
     image: postgres:latest
-    container_name: postgres
+    container_name: postgres_users
     volumes:
       - /users-microservice/data:/var/lib/postgresql
     environment:
@@ -25,9 +25,23 @@ services:
       - "5432:5432"
     networks:
       - app-network
+        
+  postgres-orders:
+    image: postgres:latest
+    container_name: postgres_orders
+    volumes:
+      - /orders-microservice/data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders
+    ports:
+      - "5433:5432"
+    networks:
+      - app-network
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3-management
     container_name: rabbitmq
     restart: always
     ports:
@@ -36,19 +50,12 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: rabbitmq
       RABBITMQ_DEFAULT_PASS: rabbitmq
-    configs:
-      - source: rabbitmq-plugins
-        target: /etc/rabbitmq/enabled_plugins
     volumes:
       - /users-microservice/data:/var/lib/rabbitmq
       - /users-microservice/data:/var/log/rabbitmq
     networks:
       - app-network
-
-configs:
-  rabbitmq-plugins:
-    content: "[rabbitmq_management]."
-
+      
 networks:
   app-network:
     driver: bridge
