@@ -39,6 +39,20 @@ services:
       - "5433:5432"
     networks:
       - app-network
+        
+  postgres-products:
+    image: postgres:latest
+    container_name: postgres_products
+    volumes:
+      - /products-microservice/data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: products
+    ports:
+      - "5434:5432"
+    networks:
+      - app-network
 
   rabbitmq:
     image: rabbitmq:3-management
