@@ -11,7 +11,31 @@ services:
       - rabbitmq
     networks:
       - app-network
-      
+        
+  orders-microservice:
+    build:
+      context: ./orders-microservice/orders-microservice
+      dockerfile: Dockerfile
+    container_name: orders-microservice
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres-orders
+    networks:
+      - app-network
+  
+  products-microservice:
+    build:
+      context: ./products-microservice/products-microservice
+      dockerfile: Dockerfile
+    container_name: products-microservice
+    ports:
+      - "8082:8080"
+    depends_on:
+      - postgres-products
+    networks:
+      - app-network
+  
   postgres-users:
     image: postgres:latest
     container_name: postgres_users
